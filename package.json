@@ -1,0 +1,51 @@
+{
+  "name": "devebot-co-redis",
+  "version": "0.2.0",
+  "description": "Devebot - Redis bridge",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib/"
+  },
+  "files": [
+    "bin/",
+    "config/",
+    "data/",
+    "lib/"
+  ],
+  "scripts": {
+    "build": "babel ./src -d ./lib",
+    "clean": "rm -rf ./lib",
+    "prepublish": "NODE_ENV=production npm run build",
+    "pretest": "NODE_ENV=test npm run build",
+    "test": "mocha --recursive ./test/**/*-test.js",
+    "verify": "npm run prepublish && mocha --recursive ./test/**/*-test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devebot/devebot-co-redis.git"
+  },
+  "keywords": [
+    "devebot",
+    "devebot-bridge"
+  ],
+  "author": "devebot",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/devebot/devebot-co-redis/issues"
+  },
+  "homepage": "https://github.com/devebot/devebot-co-redis#readme",
+  "peerDependencies": {
+    "devebot": "^0.2.4"
+  },
+  "dependencies": {
+    "devebot": "^0.2.4",
+    "redis": "^2.8.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-minify-mangle-names": "^0.3.0",
+    "babel-preset-env": "^1.6.1",
+    "chai": "^3.5.0",
+    "mocha": "^3.4.1"
+  }
+}
