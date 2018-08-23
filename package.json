@@ -35,10 +35,10 @@
   },
   "homepage": "https://github.com/devebot/devebot-co-redis#readme",
   "peerDependencies": {
-    "devebot": "^0.2.4"
+    "devebot": "^0.2.6"
   },
   "dependencies": {
-    "devebot": "^0.2.4",
+    "devebot": "^0.2.6",
     "redis": "^2.8.0"
   },
   "devDependencies": {

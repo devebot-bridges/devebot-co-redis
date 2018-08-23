@@ -12,9 +12,11 @@ var Service = function(params) {
   debugx.enabled && debugx(' + constructor start ...');
 
   params = params || {};
+  var clientOpts = params.clientOptions || {};
 
   this.open = function(kwargs) {
-    var client = redis.createClient();
+    var openOpts = lodash.merge(clientOpts, kwargs);
+    var client = new Proxy(redis.createClient(openOpts), {});
     return client;
   }
 
