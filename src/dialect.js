@@ -1,28 +1,20 @@
 'use strict';
 
-var Devebot = require('devebot');
-var Promise = Devebot.require('bluebird');
-var lodash = Devebot.require('lodash');
-var debugx = Devebot.require('pinbug')('devebot:co:redis:dialect');
-var redis = require('redis');
+const Devebot = require('devebot');
+const Promise = Devebot.require('bluebird');
+const lodash = Devebot.require('lodash');
+const redis = require('redis');
 
-var noop = function() {};
-
-var Service = function(params) {
-  debugx.enabled && debugx(' + constructor start ...');
-
-  params = params || {};
-  var clientOpts = params.clientOptions || {};
+function Dialect(params = {}) {
+  let clientOpts = params.clientOptions || params || {};
 
   this.open = function(kwargs) {
-    var openOpts = lodash.merge(clientOpts, kwargs);
-    var client = new Proxy(redis.createClient(openOpts), {});
+    let openOpts = lodash.merge(clientOpts, kwargs);
+    let client = new Proxy(redis.createClient(openOpts), {});
     return client;
   }
-
-  debugx.enabled && debugx(' - constructor end!');
 };
 
-Service.metadata = require('./metadata');
+Dialect.manifest = require('./manifest');
 
-module.exports = Service;
+module.exports = Dialect;
