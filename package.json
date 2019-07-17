@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/devebot/devebot-co-redis.git"
+    "url": "git+https://github.com/devebot-bridges/devebot-co-redis.git"
   },
   "keywords": [
     "devebot",
@@ -31,9 +31,9 @@
   "author": "devebot",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/devebot/devebot-co-redis/issues"
+    "url": "https://github.com/devebot-bridges/devebot-co-redis/issues"
   },
-  "homepage": "https://github.com/devebot/devebot-co-redis#readme",
+  "homepage": "https://github.com/devebot-bridges/devebot-co-redis#readme",
   "peerDependencies": {
     "devebot": "^0.3.0"
   },
