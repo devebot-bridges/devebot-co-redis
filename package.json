@@ -1,6 +1,6 @@
 {
   "name": "devebot-co-redis",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Devebot - Redis bridge",
   "main": "index.js",
   "directories": {
@@ -35,10 +35,10 @@
   },
   "homepage": "https://github.com/devebot/devebot-co-redis#readme",
   "peerDependencies": {
-    "devebot": "^0.2.6"
+    "devebot": "^0.3.0"
   },
   "dependencies": {
-    "devebot": "^0.2.6",
+    "devebot": "^0.3.0",
     "redis": "^2.8.0"
   },
   "devDependencies": {
@@ -46,6 +46,7 @@
     "babel-plugin-minify-mangle-names": "^0.3.0",
     "babel-preset-env": "^1.6.1",
     "chai": "^3.5.0",
+    "debug": "^4.1.1",
     "mocha": "^3.4.1"
   }
 }

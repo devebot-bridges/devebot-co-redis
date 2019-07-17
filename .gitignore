@@ -1,7 +1,8 @@
-.idea
-node_modules
-*.log
-*.log.*
+/.idea
+/node_modules
 /doc
 /log
 /lib
+*.log
+*.log.*
+.npmrc

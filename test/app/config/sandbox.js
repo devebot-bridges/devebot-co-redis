@@ -6,7 +6,7 @@ module.exports = {
       "application": {
         "redis1": {
           clientOptions: {
-            host: "192.168.2.92",
+            host: "localhost",
             port: 6379
           }
         }
