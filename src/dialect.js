@@ -8,7 +8,7 @@ function Dialect(params = {}) {
   const clientOpts = params.clientOptions || params || {};
 
   this.open = function(kwargs = {}) {
-    let openOpts = lodash.merge(clientOpts, kwargs);
+    let openOpts = lodash.merge({}, clientOpts, kwargs);
     let client = new Proxy(redis.createClient(openOpts), {});
     return client;
   }

@@ -1,16 +1,14 @@
 {
   "name": "devebot-co-redis",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Devebot - Redis bridge",
   "main": "index.js",
-  "directories": {
-    "lib": "lib/"
-  },
   "files": [
     "bin/",
     "config/",
     "data/",
-    "lib/"
+    "lib/",
+    "manifest.js"
   ],
   "scripts": {
     "build": "babel ./src -d ./lib",
