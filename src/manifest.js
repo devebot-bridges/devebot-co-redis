@@ -115,6 +115,31 @@ module.exports = {
               }
             },
             "additionalProperties": false
+          },
+          "extentions": {
+            "type": "object",
+            "properties": {
+              "retry_strategy_options": {
+                "type": "object",
+                "properties": {
+                  "retry_max_delay": {
+                    "type": "number",
+                    "default": 3000,
+                    "description": "By default, every time the client tries to connect and fails, the reconnection delay almost doubles. This delay normally grows infinitely, but setting retry_max_delay limits it to the maximum value provided in milliseconds."
+                  },
+                  "connect_timeout": {
+                    "type": "number",
+                    "default": 3600000,
+                    "description": "Setting connect_timeout limits the total time for the client to connect and reconnect. The value is provided in milliseconds and is counted from the moment a new client is created or from the time the connection is lost. The last retry is going to happen exactly at the timeout time. Default is to try connecting until the default system socket timeout has been exceeded and to try reconnecting until 1h has elapsed."
+                  },
+                  "max_attempts": {
+                    "type": "number",
+                    "default": 0,
+                    "description": "By default, a client will try reconnecting until connected. Setting max_attempts limits total amount of connection attempts. Setting this to 1 will prevent any reconnect attempt."
+                  },
+                }
+              }
+            }
           }
         },
         "additionalProperties": false
