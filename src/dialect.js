@@ -15,8 +15,18 @@ function Dialect(params = {}) {
     clientOptions = lodash.merge({}, globalOptions, clientOptions);
     clientOptions = initExtensions(refs, clientOptions, extensions);
 
-    let client = new Proxy(redis.createClient(clientOptions), {});
-    return client;
+    const clientShadow = {
+      enabled: true,
+      instance: null,
+    };
+
+    const proxiedClient = new Proxy(clientShadow, {
+      get: function (obj, prop) {
+        obj.instance = obj.instance || redis.createClient(clientOptions);
+        return prop in obj.instance ? obj.instance[prop] : undefined;
+      }
+    });
+    return proxiedClient;
   }
 };
 

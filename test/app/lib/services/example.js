@@ -1,11 +1,16 @@
 'use strict';
 
-var Service = function(params) {
+function Service (params) {
   params = params || {};
-  var Redis1 = params['application/redis#redis1'];
-  var redis1 = Redis1.open();
+
+  var redis1 = null;
+  function getClient() {
+    redis1 = redis1 || params.redisDialect.open();
+  }
 };
 
-Service.referenceList = [ 'application/redis#redis1' ];
+Service.referenceHash = {
+  redisDialect: 'application/redis#redis1'
+};
 
 module.exports = Service;

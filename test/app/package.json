@@ -1,0 +1,11 @@
+{
+  "name": "devebot-co-redis-example",
+  "version": "0.1.0",
+  "description": "devebot-co-redis Example",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "devebot",
+  "license": "MIT"
+}
