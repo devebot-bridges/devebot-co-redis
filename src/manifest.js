@@ -116,12 +116,18 @@ module.exports = {
             },
             "additionalProperties": false
           },
-          "extentions": {
+          "extensions": {
             "type": "object",
             "properties": {
               "retry_strategy_options": {
                 "type": "object",
                 "properties": {
+                  "trapped_codes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "retry_max_delay": {
                     "type": "number",
                     "default": 3000,

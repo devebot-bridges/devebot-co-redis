@@ -58,14 +58,17 @@ function initExtensions (refs = {}, clientOptions, extensions) {
     const retry_max_delay = rsOpts.retry_max_delay || 3000;
     const connect_timeout = rsOpts.connect_timeout || 3600000;
     const max_attempts = rsOpts.max_attempts || 0;
+    const trapped_codes = rsOpts.trapped_codes || [ 'ECONNREFUSED' ];
     clientOptions.retry_strategy = function (options) {
-      if (options.error && options.error.code === 'ECONNREFUSED') {
-        L.has('debug') && L.log('debug', T.add({
-          error_code: options.error.code
-        }).toMessage({
-          tmpl: 'End reconnecting on the error ${error_code}'
-        }));
-        return new Error('The server refused the connection');
+      if (options.error) {
+        if (trapped_codes.indexOf(options.error.code) >= 0) {
+          L.has('debug') && L.log('debug', T.add({
+            error_code: options.error.code
+          }).toMessage({
+            tmpl: 'End reconnecting on the error ${error_code}'
+          }));
+          return new Error('The server refused the connection');
+        }
       }
       if (options.total_retry_time > connect_timeout) {
         L.has('debug') && L.log('debug', T.add({

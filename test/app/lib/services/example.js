@@ -6,6 +6,7 @@ function Service (params) {
   var redis1 = null;
   function getClient() {
     redis1 = redis1 || params.redisDialect.open();
+    return redis1;
   }
 };
 
