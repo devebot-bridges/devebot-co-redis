@@ -1,6 +1,6 @@
 {
   "name": "devebot-co-redis",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Devebot - Redis bridge",
   "main": "index.js",
   "files": [
@@ -45,6 +45,7 @@
     "babel-preset-env": "^1.6.1",
     "chai": "^3.5.0",
     "debug": "^4.1.1",
+    "liberica": "^0.3.1",
     "mocha": "^3.4.1"
   }
 }

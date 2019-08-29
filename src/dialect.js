@@ -5,7 +5,7 @@ const lodash = Devebot.require('lodash');
 const redis = require('redis');
 
 function Dialect(params = {}) {
-  const refs = lodash.pick(this, ['logger', 'tracer']);
+  const self = this;
   const globalOptions = params.clientOptions || params || {};
 
   this.open = function(kwargs = {}) {
@@ -13,7 +13,7 @@ function Dialect(params = {}) {
 
     let clientOptions = kwargs.clientOptions || kwargs || {};
     clientOptions = lodash.merge({}, globalOptions, clientOptions);
-    clientOptions = initExtensions(refs, clientOptions, extensions);
+    clientOptions = initExtensions(self, clientOptions, extensions);
 
     const clientShadow = {
       enabled: true,
@@ -23,7 +23,7 @@ function Dialect(params = {}) {
     const proxiedClient = new Proxy(clientShadow, {
       get: function (obj, prop) {
         if (obj.instance == null) {
-          const { logger: L, tracer: T } = refs;
+          const { logger: L, tracer: T } = self;
           obj.instance = redis.createClient(clientOptions);
           obj.instance.on("ready", function () {
             obj.enabled = true;
