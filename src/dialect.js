@@ -5,7 +5,7 @@ const lodash = Devebot.require('lodash');
 const redis = require('redis');
 
 function Dialect(params = {}) {
-  const refs = lodash.pick(params, ['logger', 'tracer']);
+  const refs = lodash.pick(this, ['logger', 'tracer']);
   const globalOptions = params.clientOptions || params || {};
 
   this.open = function(kwargs = {}) {
@@ -22,7 +22,24 @@ function Dialect(params = {}) {
 
     const proxiedClient = new Proxy(clientShadow, {
       get: function (obj, prop) {
-        obj.instance = obj.instance || redis.createClient(clientOptions);
+        if (obj.instance == null) {
+          const { logger: L, tracer: T } = refs;
+          obj.instance = redis.createClient(clientOptions);
+          obj.instance.on("ready", function () {
+            obj.enabled = true;
+            L.has('info') && L.log('info', T.toMessage({
+              text: 'Redis connection is ready'
+            }));
+          });
+          obj.instance.on("error", function (err) {
+            obj.enabled = false;
+            L.has('warn') && L.log('warn', T.add({
+              error: { name: err.name, message: err.message }
+            }).toMessage({
+              text: 'Redis connection is breaking down'
+            }));
+          });
+        }
         return prop in obj.instance ? obj.instance[prop] : undefined;
       }
     });
