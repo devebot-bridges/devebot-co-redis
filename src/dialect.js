@@ -2,18 +2,40 @@
 
 const Devebot = require('devebot');
 const lodash = Devebot.require('lodash');
+
 const redis = require('redis');
+const fs = require('fs');
+const path = require('path');
+const NodeRSA = require('node-rsa');
 
 function Dialect(params = {}) {
   const self = this;
   const globalOptions = params.clientOptions || params || {};
+  const secureOptions = params.sercureOptions || {};
 
-  this.open = function(kwargs = {}) {
+  this.open = function (kwargs = {}) {
     const extensions = lodash.get(params, 'extensions', null);
 
     let clientOptions = kwargs.clientOptions || kwargs || {};
     clientOptions = lodash.merge({}, globalOptions, clientOptions);
     clientOptions = initExtensions(self, clientOptions, extensions);
+
+    if (secureOptions.encryption && clientOptions.password) {
+      const keyPath = path.resolve('./keystore/' + (secureOptions.key_file || 'public.pem'));
+      if (fs.existsSync(keyPath)) {
+        const key = fs.readFileSync(keyPath);
+        const encoding = secureOptions.encoding || 'utf8';
+        const decKey = new NodeRSA(key);
+        let password = clientOptions.password;
+        if(decKey.isPublic()){
+          clientOptions.password = decKey.decryptPublic(password, encoding);
+        } else {
+          clientOptions.password = decKey.decrypt(password, encoding);
+        }
+      } else {
+        throw new Error('Key not found at', keyPath);
+      }
+    }
 
     const clientShadow = {
       enabled: true,
@@ -51,7 +73,7 @@ Dialect.manifest = require('./manifest');
 
 module.exports = Dialect;
 
-function initExtensions (refs = {}, clientOptions, extensions) {
+function initExtensions(refs = {}, clientOptions, extensions) {
   const { logger: L, tracer: T } = refs;
   if (extensions && !lodash.isFunction(clientOptions.retry_strategy)) {
     const rsOpts = extensions.retry_strategy_options;

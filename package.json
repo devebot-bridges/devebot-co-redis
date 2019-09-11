@@ -37,7 +37,8 @@
   },
   "dependencies": {
     "devebot": "^0.3.0",
-    "redis": "^2.8.0"
+    "redis": "^2.8.0",
+    "node-rsa": "^0.4.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
