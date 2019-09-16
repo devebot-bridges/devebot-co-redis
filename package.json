@@ -28,6 +28,13 @@
     "devebot-bridge"
   ],
   "author": "devebot",
+  "contributors": [
+    {
+      "name": "chuong2v",
+      "email" : "chuong.2v@gmail.com",
+      "url" : "https://github.com/chuong2v"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/devebot-bridges/devebot-co-redis/issues"

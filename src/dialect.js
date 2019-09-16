@@ -27,13 +27,13 @@ function Dialect(params = {}) {
         const encoding = secureOptions.encoding || 'utf8';
         const decKey = new NodeRSA(key);
         let password = clientOptions.password;
-        if(decKey.isPublic()){
+        if (decKey.isPublic()) {
           clientOptions.password = decKey.decryptPublic(password, encoding);
         } else {
           clientOptions.password = decKey.decrypt(password, encoding);
         }
       } else {
-        throw new Error('Key not found at', keyPath);
+        throw new Error('RSA key file not found: ' + keyPath);
       }
     }
 
