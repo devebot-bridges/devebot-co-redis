@@ -22,14 +22,16 @@ describe('tdd:devebot-co-redis:secureOptions', function() {
 
   var encryptedPasswd = 'CB47RetQYlI9hjn+jdWVr2FT5hJyolPIfFBAeu+/WUHfiI/ubTQ7GRCvhYQn79L2ZG2z/v+EZR65qLI6jnjK7w==';
 
+  var publicKey = [
+    "-----BEGIN PUBLIC KEY-----",
+    "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKo8LaejjtjWMtE/3DFitrYq4j2V9f5/",
+    "4/CnqiedS+/9lTjuyxDu0s5m5jr15vlSGr2BkwT706dNMSgqg5N3/wECAwEAAQ==",
+    "-----END PUBLIC KEY-----"
+  ].join("\n");
+
   it('function decryptRsaPassword() properly decrypts the password with the [key] text field', function() {
     var passwd = decryptRsaPassword(encryptedPasswd, {
-      key: [
-        "-----BEGIN PUBLIC KEY-----",
-        "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKo8LaejjtjWMtE/3DFitrYq4j2V9f5/",
-        "4/CnqiedS+/9lTjuyxDu0s5m5jr15vlSGr2BkwT706dNMSgqg5N3/wECAwEAAQ==",
-        "-----END PUBLIC KEY-----"
-      ].join("\n")
+      key: publicKey
     });
     assert.equal(passwd, 'changeme');
   });
@@ -44,6 +46,20 @@ describe('tdd:devebot-co-redis:secureOptions', function() {
   it('function decryptRsaPassword() throw an exception if both of [key] and [key_file] are not found', function() {
     assert.throws(function() {
       decryptRsaPassword(encryptedPasswd, {});
+    }, Error);
+  });
+
+  it('function decryptRsaPassword() throw an exception if an invalid ecrypted password provided', function() {
+    assert.throws(function() {
+      try {
+        decryptRsaPassword("InvalidEncrypted", {
+          key: publicKey
+        });
+      } catch (err) {
+        // [Error]: Error during decryption (probably incorrect key). Original error: Error: Incorrect data or key
+        false && console.log("[%s]: %s", err.name, err.message);
+        throw err;
+      }
     }, Error);
   });
 });
