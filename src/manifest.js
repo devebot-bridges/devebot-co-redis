@@ -4,6 +4,27 @@ module.exports = {
       schema: {
         "type": "object",
         "properties": {
+          "secureOptions": {
+            "type": "object",
+            "properties": {
+              "encryption": {
+                "type": "boolean",
+                "default": false,
+                "description": "Password must be encrypted"
+              },
+              "key_file": {
+                "type": "string",
+                "default": "public.pem",
+                "description": "File name where key saved"
+              },
+              "encoding": {
+                "type": "string",
+                "default": "utf8",
+                "description": "Encoding for result string"
+              }
+            },
+            "additionalProperties": false
+          },
           "clientOptions": {
             "type": "object",
             "properties": {
