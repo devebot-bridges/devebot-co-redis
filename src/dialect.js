@@ -1,6 +1,7 @@
 'use strict';
 
 const Devebot = require('devebot');
+const chores = Devebot.require('chores');
 const lodash = Devebot.require('lodash');
 
 const redis = require('redis');
@@ -10,8 +11,23 @@ const NodeRSA = require('node-rsa');
 
 function Dialect(params = {}) {
   const self = this;
+  const L = this.logger;
+  const T = this.tracer;
+
   const globalOptions = params.clientOptions || params || {};
-  const secureOptions = params.sercureOptions || {};
+  const secureOptions = params.secureOptions || {};
+
+  L.has('debug') && L.log('debug', T.add({
+    clientOptionFields: chores.extractObjectInfo(globalOptions)
+  }).toMessage({
+    tmpl: 'clientOptions fields: ${clientOptionFields}'
+  }));
+
+  L.has('debug') && L.log('debug', T.add({
+    secureOptionFields: chores.extractObjectInfo(secureOptions)
+  }).toMessage({
+    tmpl: 'secureOptions fields: ${secureOptionFields}'
+  }));
 
   this.open = function (kwargs = {}) {
     const extensions = lodash.get(params, 'extensions', null);
@@ -21,20 +37,7 @@ function Dialect(params = {}) {
     clientOptions = initExtensions(self, clientOptions, extensions);
 
     if (secureOptions.encryption && clientOptions.password) {
-      const keyPath = path.resolve('./keystore/' + (secureOptions.key_file || 'public.pem'));
-      if (fs.existsSync(keyPath)) {
-        const key = fs.readFileSync(keyPath);
-        const encoding = secureOptions.encoding || 'utf8';
-        const decKey = new NodeRSA(key);
-        let password = clientOptions.password;
-        if (decKey.isPublic()) {
-          clientOptions.password = decKey.decryptPublic(password, encoding);
-        } else {
-          clientOptions.password = decKey.decrypt(password, encoding);
-        }
-      } else {
-        throw new Error('RSA key file not found: ' + keyPath);
-      }
+      clientOptions.password = decryptRsaPassword(clientOptions.password, secureOptions);
     }
 
     const clientShadow = {
@@ -72,6 +75,24 @@ function Dialect(params = {}) {
 Dialect.manifest = require('./manifest');
 
 module.exports = Dialect;
+
+function decryptRsaPassword (password, {encoding, key, key_file} = {}) {
+  encoding = encoding || 'utf8';
+  if (!key) {
+    const keyPath = path.resolve(key_file);
+    if (fs.existsSync(keyPath)) {
+      key = fs.readFileSync(keyPath);
+    } else {
+      throw new Error('RSA key file not found: ' + keyPath);
+    }
+  }
+  const decKey = new NodeRSA(key);
+  if (decKey.isPublic()) {
+    return decKey.decryptPublic(password, encoding);
+  } else {
+    return decKey.decrypt(password, encoding);
+  }
+}
 
 function initExtensions(refs = {}, clientOptions, extensions) {
   const { logger: L, tracer: T } = refs;

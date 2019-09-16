@@ -8,6 +8,8 @@ function Service (params) {
     redis1 = redis1 || params.redisDialect.open();
     return redis1;
   }
+
+  getClient();
 };
 
 Service.referenceHash = {

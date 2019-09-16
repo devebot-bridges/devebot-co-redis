@@ -12,6 +12,10 @@ module.exports = {
                 "default": false,
                 "description": "Password must be encrypted"
               },
+              "key": {
+                "type": "string",
+                "description": "The key content in PEM format"
+              },
               "key_file": {
                 "type": "string",
                 "default": "public.pem",
