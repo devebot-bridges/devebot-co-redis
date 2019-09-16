@@ -135,9 +135,9 @@ function createContext () {
   return ctx;
 }
 
-function assignAttributes(obj, attrs) {
+function assignPrototype(obj, attrs) {
   for (const name in attrs) {
-    obj[name] = attrs[name];
+    obj.prototype[name] = attrs[name];
   }
   return obj;
 }
@@ -149,7 +149,8 @@ function createClient(opts = {}) {
     max_attempts: 1
   }, opts);
   return new Promise(function(resolved, rejected) {
-    var dialect = assignAttributes(new Dialect(opts), createContext());
+    var wrappedDialect = assignPrototype(Dialect, createContext());
+    var dialect = new wrappedDialect(opts);
     var client = dialect.open();
     client.on('ready', function() {
       resolved(client);
